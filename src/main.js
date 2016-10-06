@@ -60,3 +60,16 @@ String.prototype.replaceHtmlEntites = function() {
     return translate[entity];
   }) );
 };
+
+var oldURL = "";
+function checkURLchange(currentURL){
+  if(currentURL != oldURL){
+    console.log(currentURL);
+    oldURL = currentURL;
+  }
+}
+
+oldURL = window.location.href;
+setInterval(function() {
+  checkURLchange(window.location.href);
+}, 1000);
