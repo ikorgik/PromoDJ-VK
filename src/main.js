@@ -1,75 +1,54 @@
 
-// Alternative of DOMContentLoaded (doesn't work somewhy).
 document.onreadystatechange = function () {
-  if (document.readyState == "complete") {
+  if (document.readyState == 'complete') {
+    var oldURL = '';
 
-    var listItems = document.querySelectorAll('.track2 .title');
+    // Periodically check page url to support no page reload behaviour.
+    setInterval(function() {
+      var currentURL = window.location.href;
 
-    Array.prototype.forEach.call(listItems, function (item) {
-      var title = item.querySelector('a').innerHTML.replaceHtmlEntites();
-      title = encodeURI(title);
-      title = title.replace(/&/g, '%26').replace(/#/g, '%23');
+      if (currentURL != oldURL) {
+        oldURL = currentURL;
 
-      var vkLink = document.createElement('a');
-      vkLink.appendChild(document.createTextNode("[vk]"));
-      vkLink.title = title;
-      vkLink.target = "_blank";
-      vkLink.href = "https://vk.com/search?c[q]=" + title + "&c[section]=audio";
-      item.appendChild(vkLink);
+        // Track list page.
+        var listItems = document.querySelectorAll('.track2 .title');
+        addLinks(listItems);
 
-      var ymLink = document.createElement('a');
-      ymLink.appendChild(document.createTextNode("[ym]"));
-      ymLink.title = title;
-      ymLink.target = "_blank";
-      ymLink.href = "https://music.yandex.ru/search?text=" + title;
-
-      item.appendChild(ymLink);
-    });
-
-    var trendyItems = document.querySelectorAll('.trendy div.playerr_title');
-
-    Array.prototype.forEach.call(trendyItems, function (item) {
-      var title = item.querySelector('a').innerHTML.replaceHtmlEntites();
-      title = encodeURI(title);
-      title = title.replace(/&/g, '%26').replace(/#/g, '%23');
-
-      var vkLink = document.createElement('a');
-      vkLink.appendChild(document.createTextNode("[vk]"));
-      vkLink.title = title;
-      vkLink.target = "_blank";
-      vkLink.href = "https://vk.com/search?c[q]=" + title + "&c[section]=audio";
-      item.appendChild(vkLink);
-
-      var ymLink = document.createElement('a');
-      ymLink.appendChild(document.createTextNode("[ym]"));
-      ymLink.title = title;
-      ymLink.target = "_blank";
-      ymLink.href = "https://music.yandex.ru/search?text=" + title;
-
-      item.appendChild(ymLink);
-    });
-
+        // Trendy page.
+        var trendyItems = document.querySelectorAll('.trendy div.playerr_title');
+        addLinks(trendyItems);
+      }
+    }, 1500);
   }
 }
 
+/**
+ * Adds VK links to each song.
+ */
+function addLinks(items) {
+  Array.prototype.forEach.call(items, function (item) {
+    // Prepares song title.
+    var title = item.querySelector('a').innerHTML.replaceHtmlEntites();
+    title = encodeURI(title);
+    title = title.replace(/&/g, '%26').replace(/#/g, '%23');
+
+    // Generates link to VK with song title as parameter.
+    var vkLink = document.createElement('a');
+    vkLink.appendChild(document.createTextNode('[vk]'));
+    vkLink.title = title;
+    vkLink.target = '_blank';
+    vkLink.href = 'https://vk.com/search?c[q]=' + title + '&c[section]=audio';
+    item.appendChild(vkLink);
+  });
+}
+
+/**
+ * Replaces special chars to clean up title before using in link.
+ */
 String.prototype.replaceHtmlEntites = function() {
-  var s = this;
   var translate_re = /&(nbsp|amp|quot|lt|gt);/g;
-  var translate = {"nbsp": " ", "amp" : "&", "quot": "\"","lt"  : "<","gt"  : ">"};
-  return ( s.replace(translate_re, function(match, entity) {
+  var translate = {'nbsp': ' ', 'amp' : '&', 'quot': '\'','lt'  : '<','gt'  : '>'};
+  return (this.replace(translate_re, function(match, entity) {
     return translate[entity];
-  }) );
+  }));
 };
-
-var oldURL = "";
-function checkURLchange(currentURL){
-  if(currentURL != oldURL){
-    console.log(currentURL);
-    oldURL = currentURL;
-  }
-}
-
-oldURL = window.location.href;
-setInterval(function() {
-  checkURLchange(window.location.href);
-}, 1000);
