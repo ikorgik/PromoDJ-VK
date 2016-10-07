@@ -3,3 +3,4 @@
 - Refactor the code
 - Song detail page integration
 - Filter reload integration
+- Add vk to icons.

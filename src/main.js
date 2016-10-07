@@ -33,12 +33,8 @@ function addLinks(items) {
     title = title.replace(/&/g, '%26').replace(/#/g, '%23');
 
     // Generates link to VK with song title as parameter.
-    var vkLink = document.createElement('a');
-    vkLink.appendChild(document.createTextNode('[vk]'));
-    vkLink.title = title;
-    vkLink.target = '_blank';
-    vkLink.href = 'https://vk.com/search?c[q]=' + title + '&c[section]=audio';
-    item.appendChild(vkLink);
+    var href = 'https://vk.com/search?c[q]=' + title + '&c[section]=audio';
+    item.insertAdjacentHTML('beforeend', '<a class="find-in-vk-link" target="_blank" href="' + href + '"></a>');
   });
 }
 
