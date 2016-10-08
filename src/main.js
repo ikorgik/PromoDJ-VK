@@ -40,7 +40,7 @@ function addListLinks(items) {
 }
 
 /**
- * Clean up string
+ * Clean up string.
  */
 String.prototype.cleanTitle = function() {
   var title = this.trim().replaceHtmlEntites();
