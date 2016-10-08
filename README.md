@@ -1,3 +1,2 @@
-## TODO:
-- Song detail page integration
-- Add vk to icons.
+# PromoDJ find in VK
+Добавляет кнопки для поиска треков PromoDJ в VK

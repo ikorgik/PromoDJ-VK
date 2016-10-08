@@ -12,11 +12,18 @@ document.onreadystatechange = function () {
 
         // Track list page.
         var listItems = document.querySelectorAll('.track2 .title');
-        addLinks(listItems);
+        addListLinks(listItems);
 
         // Trendy page.
         var trendyItems = document.querySelectorAll('.trendy div.playerr_title');
-        addLinks(trendyItems);
+        addListLinks(trendyItems);
+
+        // Song detail page.
+        var songTitle = document.querySelectorAll('.generic_title h5');
+        Array.prototype.forEach.call(songTitle, function(item) {
+          var title = item.innerHTML.substring(0, item.innerHTML.indexOf('<nobr>')).cleanTitle();
+          item.addVKLink(title);
+        });
       }
     }, 1500);
   }
@@ -25,18 +32,21 @@ document.onreadystatechange = function () {
 /**
  * Adds VK links to each song.
  */
-function addLinks(items) {
-  Array.prototype.forEach.call(items, function (item) {
-    // Prepares song title.
-    var title = item.querySelector('a').innerHTML.replaceHtmlEntites();
-    title = encodeURI(title);
-    title = title.replace(/&/g, '%26').replace(/#/g, '%23');
-
-    // Generates link to VK with song title as parameter.
-    var href = 'https://vk.com/search?c[q]=' + title + '&c[section]=audio';
-    item.insertAdjacentHTML('beforeend', '<a class="find-in-vk-link" target="_blank" href="' + href + '"></a>');
+function addListLinks(items) {
+  Array.prototype.forEach.call(items, function(item) {
+    var title = item.querySelector('a').innerHTML.cleanTitle();
+    item.addVKLink(title);
   });
 }
+
+/**
+ * Clean up string
+ */
+String.prototype.cleanTitle = function() {
+  var title = this.trim().replaceHtmlEntites();
+  title = encodeURI(title);
+  return title.replace(/&/g, '%26').replace(/#/g, '%23');
+};
 
 /**
  * Replaces special chars to clean up title before using in link.
@@ -47,4 +57,12 @@ String.prototype.replaceHtmlEntites = function() {
   return (this.replace(translate_re, function(match, entity) {
     return translate[entity];
   }));
+};
+
+/**
+ * Generates link to VK with song title as parameter.
+ */
+Element.prototype.addVKLink = function(title) {
+  var href = 'https://vk.com/search?c[q]=' + title + '&c[section]=audio';
+  this.insertAdjacentHTML('beforeend', '<a class="find-in-vk-link" target="_blank" href="' + href + '"></a>');
 };
