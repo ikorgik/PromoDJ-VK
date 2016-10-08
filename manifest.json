@@ -1,6 +1,6 @@
 {
   "name": "PromoDJ find in VK",
-  "version": "1.0",
+  "version": "1.0.1",
   "manifest_version": 2,
   "author": "Sergey Korzh",
   "description": "Добавляет кнопки для поиска треков PromoDJ в VK",
